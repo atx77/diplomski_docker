@@ -1,0 +1,15 @@
+FROM maven:3.8.6-openjdk-11 AS build
+WORKDIR /app
+RUN git clone https://github.com/atx77/diplomski_backend.git .
+RUN mvn clean package -DskipTests
+
+FROM openjdk:11-jre-slim
+WORKDIR /app
+
+COPY --from=build /app/target/webshop-0.0.1-SNAPSHOT.jar /app/webshop.jar
+
+EXPOSE 8080
+
+ENV SPRING_CONFIG_LOCATION=file:/app/application.properties
+
+CMD ["java", "-jar", "/app/webshop.jar"]

@@ -1,0 +1,15 @@
+FROM solr:9.7
+
+USER root
+
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/atx77/diplomski_solr.git /tmp/diplomski_solr
+
+RUN mkdir -p /var/solr/data
+
+RUN cp -R /tmp/diplomski_solr/* /var/solr/data/
+
+RUN chown -R solr:solr /var/solr/data
+
+USER solr
